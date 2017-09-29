@@ -22,9 +22,10 @@ RUN curl -fsSL -o piwik.tar.gz \
  && export GNUPGHOME="$(mktemp -d)" \
  && gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys 814E346FA01A20DBB04B6807B5DBD5925590A237 \
  && gpg --batch --verify piwik.tar.gz.asc piwik.tar.gz \
- && rm -r "$GNUPGHOME" piwik.tar.gz.asc \
+ && rm -rf "$GNUPGHOME" 2>&1 \
+ && rm -rf piwik.tar.gz.asc 2>&1 \
  && tar -xzf piwik.tar.gz -C /var/www/html \
- && rm piwik.tar.gz
+ && rm -f piwik.tar.gz 2>&1
 
 COPY php.ini /etc/php/7.1/conf.d/php.ini
 
