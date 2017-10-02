@@ -9,4 +9,9 @@ if [ ! -e config/global.php ]; then
 	#chown -R www-data .
 fi
 
+while /bin/true; do
+	su -s "/bin/bash" -c "php /var/www/html/piwik/console core:archive" www-data
+	sleep 3600
+done
+
 exec "$@"
