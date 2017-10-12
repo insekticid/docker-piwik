@@ -1,13 +1,23 @@
 #!/bin/bash
 set -e
 
-if [ ! -e config/global.php ]; then
-	cp -r ../config.backup/* config/
+mkdir -p config config/environment
+chown -R www-data:www-data config/
+cp -r ../config.backup/global.ini.php config/
+cp -r ../config.backup/global.php config/
+cp -r ../config.backup/environment config/
+
+if [ ! -e config/config.ini.php ]; then
+	mkdir -p config
 	chown -R www-data:www-data config/
+	cp -r ../config.backup/* config/
 	echo "Piwik Config via copy"
 	#tar cf - --one-file-system -C /var/www/html . | tar xf -
 	#chown -R www-data .
+	
+	exec "$@"
 fi
+
 
 bash -c '
 bash -s <<EOF
