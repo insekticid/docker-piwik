@@ -3,9 +3,12 @@ set -e
 
 mkdir -p config config/environment
 chown -R www-data:www-data config/
-cp -r ../config.backup/global.ini.php config/
-cp -r ../config.backup/global.php config/
-cp -r ../config.backup/environment config/
+
+if [ -e ../config.backup/global.ini.php ]; then
+	cp -r ../config.backup/global.ini.php config/
+	cp -r ../config.backup/global.php config/
+	cp -r ../config.backup/environment config/
+fi
 
 if [ ! -e config/config.ini.php ]; then
 	mkdir -p config
