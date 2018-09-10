@@ -51,10 +51,7 @@ RUN chown -R www-data:www-data /var/www/html /var/tmp/nginx
 
 WORKDIR /var/www/html/piwik
 
-RUN mv config/ ../config.backup
-
-# "/entrypoint.sh" will populate it at container startup from /usr/src/piwik
-VOLUME /var/www/html
+VOLUME /var/www/html/piwik
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
