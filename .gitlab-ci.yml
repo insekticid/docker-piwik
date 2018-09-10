@@ -1,3 +1,5 @@
+image: alpine:latest
+
 stages:
   - build
 
@@ -9,8 +11,24 @@ build_image:
   variables:
     DOCKER_DRIVER: overlay2
   script:
+    - setup_docker
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - docker build --pull -t $CI_REGISTRY_IMAGE -f Dockerfile .
     - docker push $CI_REGISTRY_IMAGE:latest
   only:
     - master
+
+.auto_devops: &auto_devops |
+  # Auto DevOps variables and functions
+
+  function setup_docker() {
+    if ! docker info &>/dev/null; then
+      if [ -z "$DOCKER_HOST" -a "$KUBERNETES_PORT" ]; then
+        export DOCKER_HOST='tcp://localhost:2375'
+      fi
+    fi
+  }
+
+
+before_script:
+  - *auto_devops

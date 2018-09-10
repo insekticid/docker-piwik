@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-mkdir -p config config/environment
-chown -R www-data:www-data config/
-
 if [ $CRON_ENABLED ]; then
 	bash -c '
 	bash -s <<EOF
