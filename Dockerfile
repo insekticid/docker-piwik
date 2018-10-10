@@ -5,7 +5,7 @@ MAINTAINER piwik@exploit.cz
 ENV PHP_INI_DIR /etc/php/7.2
 RUN mkdir -p $PHP_INI_DIR/conf.d && rm /etc/nginx/conf.d/default.conf 
 
-RUN apk add --no-cache bash php7.2-gd php7.2-mbstring php7.2-intl php7.2-pdo_mysql make gnupg geoip-dev composer php7.2-apcu redis
+RUN apk add --no-cache bash php7.2-gd php7.2-mbstring php7.2-intl php7.2-pdo_mysql php7.2-redis make gnupg geoip-dev composer php7.2-apcu
 
 RUN apk add --no-cache --virtual .build-deps php7.2-dev gcc g++ \
     && pecl install geoip-1.1.1 \
