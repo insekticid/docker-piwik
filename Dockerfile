@@ -13,7 +13,7 @@ RUN apk add --no-cache --virtual .build-deps php7.3-dev php7.3-xml php7.3-dom ph
     && apk del .build-deps
     #&& pecl clear-cache
 
-ENV PIWIK_VERSION 3.9.0
+ENV PIWIK_VERSION 3.9.1
 
 RUN curl -fsSL -o piwik.tar.gz \
       "https://builds.piwik.org/piwik-${PIWIK_VERSION}.tar.gz" \

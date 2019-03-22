@@ -17,18 +17,3 @@ build_image:
     - docker push $CI_REGISTRY_IMAGE:latest
   only:
     - master
-
-.auto_devops: &auto_devops |
-  # Auto DevOps variables and functions
-
-  function setup_docker() {
-    if ! docker info &>/dev/null; then
-      if [ -z "$DOCKER_HOST" -a "$KUBERNETES_PORT" ]; then
-        export DOCKER_HOST='tcp://localhost:2375'
-      fi
-    fi
-  }
-
-
-before_script:
-  - *auto_devops
