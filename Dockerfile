@@ -40,8 +40,18 @@ RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /
     #sed -i -e "s/pm.max_spare_servers = 3/pm.max_spare_servers = 4/g" /etc/php/7.3/php-fpm.d/www.conf && \
     #sed -i -e "s/pm.max_requests = 500/pm.max_requests = 1000/g" /etc/php/7.3/php-fpm.d/www.conf
 
-RUN mkdir -p /usr/local/share/GeoIP && curl -fsSL -o /usr/local/share/GeoIP/GeoIPCity.dat.gz https://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz \
- && gunzip /usr/local/share/GeoIP/GeoIPCity.dat.gz
+
+RUN set -ex; \
+    curl -fsSL -o GeoIPCity.tar.gz \
+        "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz"; \
+    curl -fsSL -o GeoIPCity.tar.gz.md5 \
+        "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz.md5"; \
+    echo "$(cat GeoIPCity.tar.gz.md5)  GeoIPCity.tar.gz" | md5sum -c -; \
+    mkdir -p /usr/src/GeoIPCity; \
+    tar -xf GeoIPCity.tar.gz -C /usr/src/GeoIPCity --strip-components=1; \
+    mkdir -p /usr/local/share/GeoIP; \
+    mv /usr/src/GeoIPCity/GeoLite2-City.mmdb /usr/local/share/GeoIP/GeoLite2-City.mmdb; \
+    rm -rf GeoIPCity*
 
 COPY nginx.conf /etc/nginx/
 COPY sites-available/* /etc/nginx/sites-available/
