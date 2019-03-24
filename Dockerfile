@@ -5,13 +5,7 @@ MAINTAINER piwik@exploit.cz
 ENV PHP_INI_DIR /etc/php/7.3
 RUN mkdir -p $PHP_INI_DIR/conf.d && rm /etc/nginx/conf.d/default.conf 
 
-RUN apk add --no-cache bash php7.3-gd php7.3-mbstring php7.3-intl php7.3-pdo_mysql php7.3-redis make gnupg geoip-dev composer php7.3-apcu
-
-RUN apk add --no-cache --virtual .build-deps php7.3-dev php7.3-xml php7.3-dom php7-pear gcc g++ \
-    && pecl install geoip-1.1.1 \
-    && rm -rf /tmp/* /var/cache/apk/* \
-    && apk del .build-deps
-    #&& pecl clear-cache
+RUN apk add --no-cache bash php7.3-gd php7.3-mbstring php7.3-intl php7.3-pdo_mysql php7.3-redis make gnupg composer php7.3-apcu
 
 ENV PIWIK_VERSION 3.9.1
 
@@ -49,8 +43,7 @@ RUN set -ex; \
     echo "$(cat GeoIPCity.tar.gz.md5)  GeoIPCity.tar.gz" | md5sum -c -; \
     mkdir -p /usr/src/GeoIPCity; \
     tar -xf GeoIPCity.tar.gz -C /usr/src/GeoIPCity --strip-components=1; \
-    mkdir -p /usr/local/share/GeoIP; \
-    mv /usr/src/GeoIPCity/GeoLite2-City.mmdb /usr/local/share/GeoIP/GeoLite2-City.mmdb; \
+    mv /usr/src/GeoIPCity/GeoLite2-City.mmdb /var/www/html/piwik/misc/GeoLite2-City.mmdb; \
     rm -rf GeoIPCity*
 
 COPY nginx.conf /etc/nginx/
