@@ -1,25 +1,25 @@
 FROM phpearth/php:7.3-nginx
 
-MAINTAINER piwik@exploit.cz
+MAINTAINER matomo@exploit.cz
 
 ENV PHP_INI_DIR /etc/php/7.3
 RUN mkdir -p $PHP_INI_DIR/conf.d && rm /etc/nginx/conf.d/default.conf 
 
 RUN apk add --no-cache bash php7.3-gd php7.3-mbstring php7.3-intl php7.3-pdo_mysql php7.3-redis make gnupg composer php7.3-apcu
 
-ENV PIWIK_VERSION 3.10.0
+ENV MATOMO_VERSION 3.10.0
 
-RUN curl -fsSL -o piwik.tar.gz \
-      "https://builds.piwik.org/piwik-${PIWIK_VERSION}.tar.gz" \
- && curl -fsSL -o piwik.tar.gz.asc \
-      "https://builds.piwik.org/piwik-${PIWIK_VERSION}.tar.gz.asc" \
+RUN curl -fsSL -o matomo.tar.gz \
+      "https://builds.matomo.org/matomo-${MATOMO_VERSION}.tar.gz" \
+ && curl -fsSL -o matomo.tar.gz.asc \
+      "https://builds.matomo.org/matomo-${MATOMO_VERSION}.tar.gz.asc" \
  && export GNUPGHOME="$(mktemp -d)" \
  && gpg --keyserver ipv4.pool.sks-keyservers.net --recv-keys 814E346FA01A20DBB04B6807B5DBD5925590A237 \
- && gpg --batch --verify piwik.tar.gz.asc piwik.tar.gz \
+ && gpg --batch --verify matomo.tar.gz.asc matomo.tar.gz \
  && rm -rf "$GNUPGHOME" 2>&1 \
- && rm -rf piwik.tar.gz.asc 2>&1 \
- && tar -xzf piwik.tar.gz -C /var/www/html \
- && rm -f piwik.tar.gz 2>&1
+ && rm -rf matomo.tar.gz.asc 2>&1 \
+ && tar -xzf matomo.tar.gz -C /var/www/html \
+ && rm -f matomo.tar.gz 2>&1
 
 COPY php.ini /etc/php/7.3/conf.d/php.ini
 
@@ -43,7 +43,7 @@ RUN set -ex; \
     echo "$(cat GeoIPCity.tar.gz.md5)  GeoIPCity.tar.gz" | md5sum -c -; \
     mkdir -p /usr/src/GeoIPCity; \
     tar -xf GeoIPCity.tar.gz -C /usr/src/GeoIPCity --strip-components=1; \
-    mv /usr/src/GeoIPCity/GeoLite2-City.mmdb /var/www/html/piwik/misc/GeoLite2-City.mmdb; \
+    mv /usr/src/GeoIPCity/GeoLite2-City.mmdb /var/www/html/matomo/misc/GeoLite2-City.mmdb; \
     rm -rf GeoIPCity*
 
 COPY nginx.conf /etc/nginx/
@@ -52,9 +52,9 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 RUN chown -R www-data:www-data /var/www/html /var/tmp/nginx
 
-WORKDIR /var/www/html/piwik
+WORKDIR /var/www/html/matomo
 
-VOLUME /var/www/html/piwik
+VOLUME /var/www/html/matomo
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
