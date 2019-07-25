@@ -7,7 +7,7 @@ RUN mkdir -p $PHP_INI_DIR/conf.d && rm /etc/nginx/conf.d/default.conf
 
 RUN apk add --no-cache bash php7.3-gd php7.3-mbstring php7.3-intl php7.3-pdo_mysql php7.3-redis make gnupg composer php7.3-apcu
 
-ENV MATOMO_VERSION 3.10.0
+ENV MATOMO_VERSION 3.11.0
 
 RUN curl -fsSL -o matomo.tar.gz \
       "https://builds.matomo.org/matomo-${MATOMO_VERSION}.tar.gz" \
