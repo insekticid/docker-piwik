@@ -7,7 +7,7 @@ RUN mkdir -p $PHP_INI_DIR/conf.d && rm /etc/nginx/conf.d/default.conf
 
 RUN apk add --no-cache bash php7.3-gd php7.3-mbstring php7.3-intl php7.3-pdo_mysql php7.3-redis make gnupg composer php7.3-apcu
 
-ENV MATOMO_VERSION 3.13.0
+ENV MATOMO_VERSION 3.13.2
 
 RUN curl -fsSL -o matomo.tar.gz \
       "https://builds.matomo.org/matomo-${MATOMO_VERSION}.tar.gz" \
@@ -35,16 +35,16 @@ RUN sed -i -e "s/;catch_workers_output\s*=\s*yes/catch_workers_output = yes/g" /
     #sed -i -e "s/pm.max_requests = 500/pm.max_requests = 1000/g" /etc/php/7.3/php-fpm.d/www.conf
 
 
-RUN set -ex; \
-    curl -fsSL -o GeoIPCity.tar.gz \
-        "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz"; \
-    curl -fsSL -o GeoIPCity.tar.gz.md5 \
-        "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz.md5"; \
-    echo "$(cat GeoIPCity.tar.gz.md5)  GeoIPCity.tar.gz" | md5sum -c -; \
-    mkdir -p /usr/src/GeoIPCity; \
-    tar -xf GeoIPCity.tar.gz -C /usr/src/GeoIPCity --strip-components=1; \
-    mv /usr/src/GeoIPCity/GeoLite2-City.mmdb /var/www/html/matomo/misc/GeoLite2-City.mmdb; \
-    rm -rf GeoIPCity*
+#RUN set -ex; \
+#    curl -fsSL -o GeoIPCity.tar.gz \
+#        "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz"; \
+#    curl -fsSL -o GeoIPCity.tar.gz.md5 \
+#        "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz.md5"; \
+#    echo "$(cat GeoIPCity.tar.gz.md5)  GeoIPCity.tar.gz" | md5sum -c -; \
+#    mkdir -p /usr/src/GeoIPCity; \
+#    tar -xf GeoIPCity.tar.gz -C /usr/src/GeoIPCity --strip-components=1; \
+#    mv /usr/src/GeoIPCity/GeoLite2-City.mmdb /var/www/html/matomo/misc/GeoLite2-City.mmdb; \
+#    rm -rf GeoIPCity*
 
 COPY nginx.conf /etc/nginx/
 COPY sites-available/* /etc/nginx/sites-available/
